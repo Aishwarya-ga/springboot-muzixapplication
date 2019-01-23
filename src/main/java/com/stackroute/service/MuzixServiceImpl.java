@@ -28,29 +28,24 @@ public class MuzixServiceImpl implements MuzixService {
     }
 
     @Override
-    public List<Muzix> deleteById(int trackId) throws MuzixNotFoundException {
-        if(muzixRepository.existsById(trackId)){
+    public List<Muzix> deleteById(int trackId){
             muzixRepository.deleteById(trackId);
             return muzixRepository.findAll();
-        }
-        else {
-            throw new MuzixNotFoundException("track not found");
-        }
     }
 
     @Override
-    public List<Muzix> getAllMuzix(){
+    public List<Muzix> getAllMuzix() throws MuzixNotFoundException{
+        List<Muzix> muzix = muzixRepository.findAll();
+        if(muzix.isEmpty()){
+            throw new MuzixNotFoundException("track not found");
+        }
         return muzixRepository.findAll();
     }
 
     @Override
-    public Muzix getTrack(int trackId) throws MuzixNotFoundException {
-        if(muzixRepository.existsById(trackId)){
+    public Muzix getTrack(int trackId) {
             Optional<Muzix> muzix = muzixRepository.findById(trackId);
             return muzix.get();
-        }
-        throw new MuzixNotFoundException("track not found");
-
     }
 
     @Override
@@ -60,10 +55,7 @@ public class MuzixServiceImpl implements MuzixService {
     }
 
     @Override
-    public Muzix getTrackByName(String trackName) throws MuzixNotFoundException {
-        if(trackName == null){
-            throw new MuzixNotFoundException("track name not existed");
-        }
+    public Muzix getTrackByName(String trackName) {
         return muzixRepository.findTrackByName(trackName);
     }
 

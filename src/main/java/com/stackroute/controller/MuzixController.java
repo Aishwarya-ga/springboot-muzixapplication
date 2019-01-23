@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="api/muzix")
+@RequestMapping(value="api/v1")
 public class MuzixController {
     MuzixService muzixService;
     @Autowired
@@ -20,45 +20,31 @@ public class MuzixController {
     }
     //to insert
     @PostMapping("muzix")
-    public ResponseEntity<?> saveMuzix(@RequestBody Muzix muzix){
+    public ResponseEntity<?> saveMuzix(@RequestBody Muzix muzix) throws MuzixAlreadyExistsException{
         ResponseEntity responseEntity;
-        try {
-            muzixService.saveMuzix(muzix);
-            responseEntity = new ResponseEntity<String>("Succesfully inserted", HttpStatus.CREATED);
-        }catch(MuzixAlreadyExistsException e){
-            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
-
-        }
-            return responseEntity;
+        muzixService.saveMuzix(muzix);
+        responseEntity = new ResponseEntity<String>("Succesfully inserted", HttpStatus.CREATED);
+        return responseEntity;
     }
     //to delete
     @DeleteMapping("muzix/{id}")
-    public ResponseEntity<?> deleteMuzix(@PathVariable int id){
+    public ResponseEntity<?> deleteMuzix(@PathVariable int id) throws MuzixNotFoundException{
         ResponseEntity responseEntity;
-        try {
-            muzixService.deleteById(id);
-            responseEntity = new ResponseEntity<List<Muzix>>(muzixService.getAllMuzix(), HttpStatus.OK);
-        }catch (MuzixNotFoundException e){
-            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
-
-        }
-            return responseEntity;
+        muzixService.deleteById(id);
+        responseEntity = new ResponseEntity<List<Muzix>>(muzixService.getAllMuzix(), HttpStatus.OK);
+        return responseEntity;
     }
     //fetch(GET) data
     @GetMapping("muzix")
-    public ResponseEntity<?> getAllMuzix(){
+    public ResponseEntity<?> getAllMuzix() throws MuzixNotFoundException{
         ResponseEntity responseEntity = new ResponseEntity<List<Muzix>>(muzixService.getAllMuzix(),HttpStatus.OK);
         return responseEntity;
     }
     //track(get) by id
     @GetMapping("muzix/{id}")
-    public ResponseEntity<?> getTrack(@PathVariable int id) {
+    public ResponseEntity<?> getTrack(@PathVariable int id) throws MuzixNotFoundException {
         ResponseEntity responseEntity;
-        try {
-            responseEntity =  new ResponseEntity<Muzix>(muzixService.getTrack(id), HttpStatus.OK);
-        } catch (MuzixNotFoundException e) {
-            responseEntity = new ResponseEntity<String>(e.getMessage(),HttpStatus.CONFLICT);
-        }
+        responseEntity =  new ResponseEntity<Muzix>(muzixService.getTrack(id), HttpStatus.OK);
         return responseEntity;
     }
     //to update
@@ -70,11 +56,7 @@ public class MuzixController {
     @GetMapping("muzix/{trackName}")
     public ResponseEntity<?> getTrackByName(@PathVariable String trackName){
         ResponseEntity responseEntity;
-        try{
-            responseEntity = new ResponseEntity<Muzix>(muzixService.getTrackByName(trackName),HttpStatus.OK);
-        }catch (MuzixNotFoundException e){
-            responseEntity = new ResponseEntity<String>(e.getMessage(),HttpStatus.CONFLICT);
-        }
+        responseEntity = new ResponseEntity<Muzix>(muzixService.getTrackByName(trackName),HttpStatus.OK);
         return responseEntity;
     }
 }
