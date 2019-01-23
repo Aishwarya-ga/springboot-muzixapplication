@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value="api/v1")
 public class MuzixController {
-    MuzixService muzixService;
+    private MuzixService muzixService;
     @Autowired
     public MuzixController(MuzixService muzixService){
         this.muzixService = muzixService;

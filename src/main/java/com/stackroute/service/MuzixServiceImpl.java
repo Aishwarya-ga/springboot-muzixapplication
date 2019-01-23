@@ -12,12 +12,13 @@ import java.util.Optional;
 
 @Service
 public class MuzixServiceImpl implements MuzixService {
-    MuzixRepository muzixRepository;
+    private MuzixRepository muzixRepository;
     @Autowired
     public MuzixServiceImpl(MuzixRepository muzixRepository){
         this.muzixRepository = muzixRepository;
     }
 
+    //method to save muzix tracks
     @Override
     public Muzix saveMuzix(Muzix muzix) throws MuzixAlreadyExistsException {
         if(muzixRepository.existsById(muzix.getTrackId())){
@@ -46,6 +47,7 @@ public class MuzixServiceImpl implements MuzixService {
     @Override
     public Muzix getTrack(int trackId) throws MuzixNotFoundException {
         if(muzixRepository.existsById(trackId)){
+            //returns only when there
             Optional<Muzix> muzix = muzixRepository.findById(trackId);
             return muzix.get();
         }
