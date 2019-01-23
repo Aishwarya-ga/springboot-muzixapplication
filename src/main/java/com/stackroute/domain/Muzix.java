@@ -1,11 +1,13 @@
 package com.stackroute.domain;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
 public class Muzix {
-    @Id                       //indicates that trackId is primary key
+    @Id                   //indicates that trackId is primary key
     private int trackId;
     private String trackName;
     private String comments;

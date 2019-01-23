@@ -24,19 +24,18 @@ public class MuzixServiceImpl implements MuzixService {
             throw new MuzixAlreadyExistsException("track already exists");
         }
         Muzix saveMuzix = muzixRepository.save(muzix);
-        if(saveMuzix == null){
-            throw new MuzixAlreadyExistsException("track already exista");
-        }
         return saveMuzix;
     }
 
     @Override
     public List<Muzix> deleteById(int trackId) throws MuzixNotFoundException {
-        if(trackId == 0){
+        if(muzixRepository.existsById(trackId)){
+            muzixRepository.deleteById(trackId);
+            return muzixRepository.findAll();
+        }
+        else {
             throw new MuzixNotFoundException("track not found");
         }
-        muzixRepository.deleteById(trackId);
-        return muzixRepository.findAll();
     }
 
     @Override
@@ -46,11 +45,12 @@ public class MuzixServiceImpl implements MuzixService {
 
     @Override
     public Muzix getTrack(int trackId) throws MuzixNotFoundException {
-        if(trackId == 0){
-            throw new MuzixNotFoundException("track not found");
+        if(muzixRepository.existsById(trackId)){
+            Optional<Muzix> muzix = muzixRepository.findById(trackId);
+            return muzix.get();
         }
-        Optional<Muzix> muzix = muzixRepository.findById(trackId);
-        return muzix.get();
+        throw new MuzixNotFoundException("track not found");
+
     }
 
     @Override
