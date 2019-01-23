@@ -1,47 +1,44 @@
+/**
+ * Muzix Application Case Study
+ * 1 Name of Project
+ * Muzix Application
+ * 2 Objective/Vision
+ * This is an online application that helps users manage music
+ * listed on Music Database (https://www.last.fm).
+ * Using this app, a user should be able to search and
+ * manage music.
+ * 3 Users of the system
+ * All Internet users
+ * 4 Functional Requirements
+ * 1. Application should allow all the users to perform the
+ * following activities:
+ * a. Save track information such as trackId,
+ * trackName, comments of the track.
+ * b. Display saved track.
+ * c. Update comments of saved track.
+ * d. Remove track
+ * 5 Non-Functional Requirements
+ * 1. App should be accessible from any location with access
+ * to the Internet.
+ * 2. App should be responsive to display consistently across
+ * multiple device screens.
+ * 3. App should have an intuitive UI that can be operated by
+ * novice expert Internet users.
+ * 6 Tools and technologies to be used
+ * To Be Decided
+ */
 package com.stackroute;
 
-import com.stackroute.domain.Muzix;
-import com.stackroute.repository.MuzixRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.core.env.Environment;
+
 
 @SpringBootApplication
-@PropertySource("classpath:property.properties")
-public class MuzixApplication implements ApplicationListener<ContextRefreshedEvent>,CommandLineRunner{
-	@Value("4")
-	private int trackId;
-	@Value("${trackName}")
-	private String trackName;
-	@Value("By Ashwath")
-	private String comments;
-
-	@Autowired
-	MuzixRepository muzixRepository;
-
-	@Autowired
-	Environment env;
+public class MuzixApplication{
 
 	public static void main(String[] args) {
 		SpringApplication.run(MuzixApplication.class, args);
 	}
 
-	@Override
-	public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-		Muzix muzix = new Muzix(trackId,trackName,comments);
-		muzixRepository.save(muzix);
-	}
-
-	@Override
-	public void run(String... args) throws Exception {
-		Muzix muzix = new Muzix(Integer.parseInt(env.getProperty("trackId")),env.getProperty("trackName"),env.getProperty("comments"));
-		muzixRepository.save(muzix);
-	}
 }
 

@@ -18,7 +18,7 @@ public class MuzixServiceImpl implements MuzixService {
         this.muzixRepository = muzixRepository;
     }
 
-    //method to save muzix tracks
+    //method to save muzix
     @Override
     public Muzix saveMuzix(Muzix muzix) throws MuzixAlreadyExistsException {
         if(muzixRepository.existsById(muzix.getTrackId())){
@@ -28,6 +28,7 @@ public class MuzixServiceImpl implements MuzixService {
         return saveMuzix;
     }
 
+    //method to delete muzix by id
     @Override
     public List<Muzix> deleteById(int trackId) throws MuzixNotFoundException {
         if(muzixRepository.existsById(trackId)){
@@ -39,15 +40,17 @@ public class MuzixServiceImpl implements MuzixService {
         }
     }
 
+    //method to get all muzix
     @Override
     public List<Muzix> getAllMuzix(){
         return muzixRepository.findAll();
     }
 
+    //method to get muzix based on Id
     @Override
-    public Muzix getTrack(int trackId) throws MuzixNotFoundException {
+    public Muzix getTrackById(int trackId) throws MuzixNotFoundException {
         if(muzixRepository.existsById(trackId)){
-            //returns only when there
+            //optional returns only when there anything to return
             Optional<Muzix> muzix = muzixRepository.findById(trackId);
             return muzix.get();
         }
@@ -55,12 +58,14 @@ public class MuzixServiceImpl implements MuzixService {
 
     }
 
+    //method to update only comment based on the Id
     @Override
     public Muzix updateTrackComment(Muzix muzix) {
         Muzix updateTrack=muzixRepository.save(muzix);
         return updateTrack;
     }
 
+    //method to get the muzix based on name
     @Override
     public Muzix getTrackByName(String trackName) throws MuzixNotFoundException {
         if(trackName == null){
@@ -68,6 +73,5 @@ public class MuzixServiceImpl implements MuzixService {
         }
         return muzixRepository.findTrackByName(trackName);
     }
-
 
 }

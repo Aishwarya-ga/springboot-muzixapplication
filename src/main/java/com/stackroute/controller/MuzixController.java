@@ -10,71 +10,83 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+/*
+ *This is controller class which create object of MuzixService class and
+ * consume the methods of it.
+ */
 @RestController
 @RequestMapping(value="api/v1")
 public class MuzixController {
+
+    /* It instantiate the MuzixService class so as to consume the
+     * method of the same
+     */
     private MuzixService muzixService;
+
+    /*
+     * Parameterized constructor to create TrackController instance.
+     */
     @Autowired
     public MuzixController(MuzixService muzixService){
         this.muzixService = muzixService;
     }
-    //to insert
+
+    /*
+     *  to add new muzix
+     */
     @PostMapping("muzix")
-    public ResponseEntity<?> saveMuzix(@RequestBody Muzix muzix){
+    public ResponseEntity<?> saveMuzix(@RequestBody Muzix muzix) throws MuzixAlreadyExistsException{
         ResponseEntity responseEntity;
-        try {
-            muzixService.saveMuzix(muzix);
-            responseEntity = new ResponseEntity<String>("Succesfully inserted", HttpStatus.CREATED);
-        }catch(MuzixAlreadyExistsException e){
-            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
-
-        }
-            return responseEntity;
+        muzixService.saveMuzix(muzix);
+        responseEntity = new ResponseEntity<String>("Succesfully inserted", HttpStatus.CREATED);
+        return responseEntity;
     }
-    //to delete
+
+    /*
+     *to delete the muzix based in Id
+     */
     @DeleteMapping("muzix/{id}")
-    public ResponseEntity<?> deleteMuzix(@PathVariable int id){
+    public ResponseEntity<?> deleteMuzix(@PathVariable int id) throws MuzixNotFoundException{
         ResponseEntity responseEntity;
-        try {
-            muzixService.deleteById(id);
-            responseEntity = new ResponseEntity<List<Muzix>>(muzixService.getAllMuzix(), HttpStatus.OK);
-        }catch (MuzixNotFoundException e){
-            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
-
-        }
-            return responseEntity;
+        muzixService.deleteById(id);
+        responseEntity = new ResponseEntity<List<Muzix>>(muzixService.getAllMuzix(), HttpStatus.OK);
+        return responseEntity;
     }
-    //fetch(GET) data
-    @GetMapping("muzix")
-    public ResponseEntity<?> getAllMuzix(){
+
+    /*
+     *fetch(GET) all Muzix data
+     */
+    @GetMapping("muzixs")
+    public ResponseEntity<?> getAllMuzix() throws MuzixNotFoundException{
         ResponseEntity responseEntity = new ResponseEntity<List<Muzix>>(muzixService.getAllMuzix(),HttpStatus.OK);
         return responseEntity;
     }
-    //track(get) by id
+
+    /*
+     * track(get) muzix by id
+     */
     @GetMapping("muzix/{id}")
-    public ResponseEntity<?> getTrack(@PathVariable int id) {
+    public ResponseEntity<?> getMuzixById(@PathVariable int id) throws MuzixNotFoundException {
         ResponseEntity responseEntity;
-        try {
-            responseEntity =  new ResponseEntity<Muzix>(muzixService.getTrack(id), HttpStatus.OK);
-        } catch (MuzixNotFoundException e) {
-            responseEntity = new ResponseEntity<String>(e.getMessage(),HttpStatus.CONFLICT);
-        }
+        responseEntity =  new ResponseEntity<Muzix>(muzixService.getTrackById(id), HttpStatus.OK);
         return responseEntity;
     }
-    //to update
+
+    /*
+     *to update the comment of specific muzix based on id
+     */
     @PutMapping("muzix")
-    public ResponseEntity<?> updateMuzix(@RequestBody Muzix muzix){
-      return new ResponseEntity<Muzix>(muzixService.updateTrackComment(muzix),HttpStatus.OK);
+    public ResponseEntity<?> updateMuzixByComment(@RequestBody Muzix muzix){
+        return new ResponseEntity<Muzix>(muzixService.updateTrackComment(muzix),HttpStatus.OK);
     }
 
+    /*
+     *to get muzix by name
+     */
     @GetMapping("muzix/{trackName}")
-    public ResponseEntity<?> getTrackByName(@PathVariable String trackName){
+    public ResponseEntity<?> getMuzixByName(@PathVariable String trackName) throws MuzixNotFoundException{
         ResponseEntity responseEntity;
-        try{
-            responseEntity = new ResponseEntity<Muzix>(muzixService.getTrackByName(trackName),HttpStatus.OK);
-        }catch (MuzixNotFoundException e){
-            responseEntity = new ResponseEntity<String>(e.getMessage(),HttpStatus.CONFLICT);
-        }
+        responseEntity = new ResponseEntity<Muzix>(muzixService.getTrackByName(trackName),HttpStatus.OK);
         return responseEntity;
     }
 }
