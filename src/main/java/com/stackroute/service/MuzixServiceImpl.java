@@ -68,10 +68,9 @@ public class MuzixServiceImpl implements MuzixService {
     //method to get the muzix based on name
     @Override
     public Muzix getTrackByName(String trackName) throws MuzixNotFoundException {
-        if(trackName == null){
-            throw new MuzixNotFoundException("track name not existed");
+        if(trackName.contains(trackName)){
+            return muzixRepository.findTrackByName(trackName);
         }
-        return muzixRepository.findTrackByName(trackName);
+        throw new MuzixNotFoundException("track name not existed");
     }
-
 }

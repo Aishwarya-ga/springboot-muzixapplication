@@ -20,6 +20,7 @@ public class ApplicationListener implements org.springframework.context.Applicat
 
     @Autowired
     MuzixRepository muzixRepository;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         Muzix muzix = new Muzix(trackId,trackName,comments);
