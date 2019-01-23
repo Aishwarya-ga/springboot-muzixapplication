@@ -10,21 +10,12 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 @SpringBootApplication
-public class MuzixApplication implements ApplicationListener<ContextRefreshedEvent> , CommandLineRunner {
+public class MuzixApplication {
 	@Autowired
 	MuzixRepository muzixRepository;
 	public static void main(String[] args) {
 		SpringApplication.run(MuzixApplication.class, args);
 	}
 
-	@Override
-	public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-		muzixRepository.save(new Muzix(1,"Kannadakadalige","By Ashwath"));
-	}
-
-	@Override
-	public void run(String... args) throws Exception {
-		muzixRepository.save(new Muzix(1,"Kannadakadalige","By Ashwath"));
-	}
 }
 
